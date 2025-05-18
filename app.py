@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 import os
 
+# Hugging Face API
 API_URL = "https://api-inference.huggingface.co/models/thuhang04/fish-diagnosis-model"
 HF_TOKEN = os.environ.get("HF_TOKEN")
 
@@ -17,15 +18,17 @@ def predict():
     if not input_text:
         return jsonify({"error": "Thiếu input"}), 400
 
-    payload = {
-        "inputs": input_text
-    }
-
-    response = requests.post(API_URL, headers=headers, json=payload)
+    payload = {"inputs": input_text}
 
     try:
+        response = requests.post(API_URL, headers=headers, json=payload)
+        print("HuggingFace raw response:", response.text)  # Log phản hồi thực tế
+
+        
         return jsonify(response.json())
-    except Exception:
+
+    except Exception as e:
+        print("Exception:", str(e))
         return jsonify({"error": "Không thể phân tích phản hồi từ Hugging Face"}), 500
 
 
