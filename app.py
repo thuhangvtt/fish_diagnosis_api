@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
 from sentence_transformers import SentenceTransformer, util
+import os
+
+model = SentenceTransformer("thuhang04/fish-diagnosis-model")
+model = SentenceTransformer(model_path)
 
 app = Flask(__name__)
-model = SentenceTransformer("fish_model")  
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -23,3 +26,6 @@ def predict():
 
     results = sorted(results, key=lambda x: x["similarity"], reverse=True)
     return jsonify(results[:5])
+
+if __name__ == "__main__":
+    app.run()
